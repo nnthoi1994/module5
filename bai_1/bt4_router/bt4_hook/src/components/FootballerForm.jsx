@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { addNew, findById, update } from '../service/footballerService';
+import { addNew, findById, update } from '../service/footballerService.js';
 import { toast } from 'react-toastify';
-import {getAll} from "../service/footballerService";
+import {getAll} from "../service/footballerService.js";
 
 function FootballerForm() {
     const { id } = useParams();

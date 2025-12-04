@@ -6,9 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import FootballerList from './pages/FootballerList';
-import FootballerForm from './pages/FootballerForm';
+import Home from './components/Home.jsx';
+import FootballerList from './components/FootballerList.jsx';
+import FootballerForm from './components/FootballerForm.jsx';
 
 function App() {
     return (
