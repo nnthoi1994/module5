@@ -1,0 +1,54 @@
+{
+  "footballerList": [
+    {
+      "id": "1",
+      "code": "C001",
+      "name": "Thới",
+      "dob": "1987-06-24",
+      "value": 50000000,
+      "position": 1
+    },
+    {
+      "id": "2",
+      "code": "C002",
+      "name": "Thành",
+      "dob": "1995-02-05",
+      "value": 40000000,
+      "position": 2
+    },
+    {
+      "id": "3",
+      "code": "C004",
+      "name": "An",
+      "dob": "2002-06-28",
+      "value": 70000000,
+      "position": 3
+    },
+    {
+      "id": "80e8",
+      "code": "a",
+      "name": "aaaa",
+      "dob": "2025-12-10",
+      "value": 1111,
+      "position": 4
+    }
+  ],
+  "position": [
+    {
+      "id": "a1",
+      "name": "Tiền đạo"
+    },
+    {
+      "id": "a2",
+      "name": "Tiền vệ"
+    },
+    {
+      "id": "a3",
+      "name": "Hậu vệ"
+    },
+    {
+      "id": "a4",
+      "name": "Thủ môn"
+    }
+  ]
+}
