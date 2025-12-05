@@ -1,134 +1,133 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { toast } from 'react-toastify';
-// Import các hàm service đã viết ở trên
-import { addNewFootballer, findFootballerById, updateFootballer, getAllPositions } from '../service/footballerService';
+import { addNewFootballer, findFootballerById, updateFootballer } from "../service/footballerService.js";
+import { getAllPositions } from "../service/positionService.js";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Button } from "react-bootstrap";
+import * as Yup from "yup";
 
-function FootballerForm() {
-
+const FootballerForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [footballer, setFootballer] = useState({
+        code: "",
+        name: "",
+        dob: "",
+        value: "",
+        position: ""
+    });
 
     const [positions, setPositions] = useState([]);
 
-
-    const [initialValues, setInitialValues] = useState({
-        code: '',
-        name: '',
-        dob: '',
-        value: '',
-        position: ''
-    });
-
-
     useEffect(() => {
+        const fetchData = async () => {
+            const positionData = await getAllPositions();
+            setPositions(positionData);
 
-        const fetchPositions = async () => {
-            const data = await getAllPositions();
-            setPositions(data);
-        };
-        fetchPositions();
-    }, []);
-
-
-    useEffect(() => {
-        if (id) {
-            const fetchDetail = async () => {
-
+            if (id) {
                 const data = await findFootballerById(id);
                 if (data) {
-
-                    setInitialValues(data);
+                    setFootballer({
+                        ...data,
+                        position: JSON.stringify(data.position)
+                    });
                 }
-            };
-            fetchDetail();
+            }
         }
+        fetchData();
     }, [id]);
 
-
-    const validationSchema = Yup.object({
-        code: Yup.string().required("Mã không được để trống"),
-        name: Yup.string().required("Tên không được để trống"),
-        value: Yup.number().required("Giá trị phải là số").min(1000, "Giá trị quá thấp"),
-
-        position: Yup.string().required("Vui lòng chọn vị trí")
-    });
-
-
     const handleSubmit = async (values) => {
-
         const payload = {
             ...values,
-            position: parseInt(values.position), // Chuyển "1" -> 1 để khớp dữ liệu db.json
-            value: parseInt(values.value)
+            position: JSON.parse(values.position)
         };
 
+        let isSuccess = false;
         if (id) {
-
-            await updateFootballer(payload);
-            toast.success("Cập nhật thành công!");
+            isSuccess = await updateFootballer(payload);
         } else {
-
-            await addNewFootballer(payload);
-            toast.success("Thêm mới thành công!");
+            isSuccess = await addNewFootballer(payload);
         }
 
-        navigate('/footballers');
-    };
+        if (isSuccess) {
+            toast.success(id ? "Cập nhật thành công" : "Thêm mới thành công", {
+                position: "top-right",
+                theme: "dark",
+                autoClose: 500
+            });
+            navigate("/footballers");
+        } else {
+            toast.error(id ? "Cập nhật thất bại" : "Thêm mới thất bại", {
+                position: "top-right",
+                theme: "dark",
+                autoClose: 500
+            });
+        }
+    }
+
+    const validation = Yup.object({
+        code: Yup.string().required("Mã không được để trống").matches(/^C[0-9]{3}$/, "Mã phải có dạng Cxxx"),
+        name: Yup.string().required("Tên không được để trống"),
+        dob: Yup.date().required("Vui lòng chọn ngày sinh"),
+        value: Yup.number().required("Vui lòng nhập giá trị").min(1000, "Giá trị tối thiểu 1000"),
+        position: Yup.string().required("Yêu cầu chọn vị trí")
+    });
 
     return (
         <div className="container mt-4">
-            <h2>{id ? "Cập nhật cầu thủ" : "Thêm cầu thủ mới"}</h2>
-
+            <h2 className="text-center">{id ? "Cập nhật cầu thủ" : "Thêm cầu thủ mới"}</h2>
             <Formik
                 enableReinitialize={true}
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={footballer}
                 onSubmit={handleSubmit}
+                validationSchema={validation}
             >
                 <Form className="w-50 mx-auto border p-4 rounded shadow">
                     <div className="mb-3">
-                        <label>Mã cầu thủ:</label>
-                        <Field name="code" className="form-control" />
-                        <ErrorMessage name="code" component="div" className="text-danger small" />
+                        <label>Mã cầu thủ</label>
+                        <Field type="text" name="code" className="form-control" />
+                        <ErrorMessage className="text-danger" name="code" component="small" />
                     </div>
 
                     <div className="mb-3">
-                        <label>Tên cầu thủ:</label>
-                        <Field name="name" className="form-control" />
-                        <ErrorMessage name="name" component="div" className="text-danger small" />
+                        <label>Tên cầu thủ</label>
+                        <Field type="text" name="name" className="form-control" />
+                        <ErrorMessage className="text-danger" name="name" component="small" />
                     </div>
 
                     <div className="mb-3">
-                        <label>Ngày sinh:</label>
-                        <Field name="dob" type="date" className="form-control" />
+                        <label>Ngày sinh</label>
+                        <Field type="date" name="dob" className="form-control" />
+                        <ErrorMessage className="text-danger" name="dob" component="small" />
                     </div>
 
                     <div className="mb-3">
-                        <label>Giá trị chuyển nhượng:</label>
-                        <Field name="value" type="number" className="form-control" />
-                        <ErrorMessage name="value" component="div" className="text-danger small" />
+                        <label>Giá trị chuyển nhượng</label>
+                        <Field type="number" name="value" className="form-control" />
+                        <ErrorMessage className="text-danger" name="value" component="small" />
                     </div>
 
                     <div className="mb-3">
-                        <label>Vị trí:</label>
-                        {/* as="select" biến Field thành thẻ <select> */}
+                        <label>Vị trí</label>
                         <Field as="select" name="position" className="form-control">
-                            <option value="">-- Chọn vị trí --</option>
-                            {/* Map qua mảng positions lấy từ API để tạo option */}
-                            {positions.map(p => (
-                                <option key={p.id} value={p.id}>{p.name}</option>
+                            <option value="">--- Chọn vị trí ---</option>
+                            {positions && positions.map((pos) => (
+                                <option key={pos.id} value={JSON.stringify(pos)}>
+                                    {pos.name}
+                                </option>
                             ))}
                         </Field>
-                        <ErrorMessage name="position" component="div" className="text-danger small" />
+                        <ErrorMessage className="text-danger" name="position" component="small" />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">
-                        {id ? "Cập nhật" : "Thêm mới"}
-                    </button>
+                    <div className="text-center">
+                        <Button className="btn-success btn-sm" type="submit">
+                            {id ? "Cập nhật" : "Thêm mới"}
+                        </Button>
+                    </div>
                 </Form>
             </Formik>
         </div>

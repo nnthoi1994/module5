@@ -1,54 +1,66 @@
 {
+  "position": [
+    {
+      "id": 1,
+      "name": "Tiền đạo"
+    },
+    {
+      "id": 2,
+      "name": "Tiền vệ"
+    },
+    {
+      "id": 3,
+      "name": "Hậu vệ"
+    },
+    {
+      "id": 4,
+      "name": "Thủ môn"
+    }
+  ],
   "footballerList": [
     {
-      "id": "1",
+      "id": 1,
       "code": "C001",
       "name": "Thới",
       "dob": "1987-06-24",
       "value": 50000000,
-      "position": 1
+      "position": {
+        "id": 1,
+        "name": "Tiền đạo"
+      }
     },
     {
-      "id": "2",
+      "id": 2,
       "code": "C002",
       "name": "Thành",
       "dob": "1995-02-05",
       "value": 40000000,
-      "position": 2
+      "position": {
+        "id": 1,
+        "name": "Tiền đạo"
+      }
     },
     {
-      "id": "3",
-      "code": "C004",
+      "id": 3,
+      "code": "C003",
       "name": "An",
       "dob": "2002-06-28",
       "value": 70000000,
-      "position": 3
+      "position": {
+        "id": 2,
+        "name": "Tiền vệ"
+      }
     },
     {
-      "id": "80e8",
-      "code": "a",
-      "name": "aaaa",
-      "dob": "2025-12-10",
-      "value": 1111,
-      "position": 4
-    }
-  ],
-  "position": [
-    {
-      "id": "a1",
-      "name": "Tiền đạo"
-    },
-    {
-      "id": "a2",
-      "name": "Tiền vệ"
-    },
-    {
-      "id": "a3",
-      "name": "Hậu vệ"
-    },
-    {
-      "id": "a4",
-      "name": "Thủ môn"
+      "id": "f47d",
+      "code": "C112",
+      "name": "222",
+      "dob": "2025-12-06",
+      "value": 222222,
+      "position": {
+        "id": 3,
+        "name": "Hậu vệ"
+      }
     }
   ]
 }

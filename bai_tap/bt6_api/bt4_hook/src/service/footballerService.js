@@ -1,84 +1,70 @@
 import axios from "axios";
 
-
-const URL_FOOTBALLER = "http://localhost:3000/footballerList";
-const URL_POSITION = "http://localhost:3000/position";
+const URL_BE = "http://localhost:3000";
 
 
-export const getAllFootballers = async () => {
+export async function getAllFootballers() {
     try {
-
-        const response = await axios.get(URL_FOOTBALLER);
-
+        const response = await axios.get(`${URL_BE}/footballerList?_sort=name&_order=asc`);
         return response.data;
     } catch (e) {
-
-        console.error("Lỗi lấy danh sách cầu thủ", e);
+        console.log(e.message);
         return [];
     }
-};
+}
 
-
-export const getAllPositions = async () => {
+export async function addNewFootballer(footballer) {
     try {
-        const response = await axios.get(URL_POSITION);
+        const response = await axios.post(`${URL_BE}/footballerList`, footballer);
+
+        return response.status === 201;
+    } catch (e) {
+        console.log(e.message);
+        return false;
+    }
+}
+
+
+export async function updateFootballer(footballer) {
+    try {
+        const response = await axios.put(`${URL_BE}/footballerList/${footballer.id}`, footballer);
+
+        return response.status === 200;
+    } catch (e) {
+        console.log(e.message);
+        return false;
+    }
+}
+
+
+export async function findFootballerById(id) {
+    try {
+        const response = await axios.get(`${URL_BE}/footballerList/${id}`);
         return response.data;
     } catch (e) {
-        console.error("Lỗi lấy danh sách vị trí", e);
-        return [];
-    }
-};
-
-
-export const addNewFootballer = async (footballer) => {
-    try {
-
-        await axios.post(URL_FOOTBALLER, footballer);
-    } catch (e) {
-        console.error("Lỗi thêm mới", e);
-    }
-};
-
-
-export const findFootballerById = async (id) => {
-    try {
-
-        const response = await axios.get(`${URL_FOOTBALLER}/${id}`);
-        return response.data;
-    } catch (e) {
-        console.error("Lỗi tìm kiếm theo ID", e);
+        console.log(e.message);
         return null;
     }
-};
+}
 
 
-export const updateFootballer = async (footballer) => {
+export async function deleteFootballerById(id) {
     try {
-
-        await axios.put(`${URL_FOOTBALLER}/${footballer.id}`, footballer);
+        const response = await axios.delete(`${URL_BE}/footballerList/${id}`);
+        return response.status === 200;
     } catch (e) {
-        console.error("Lỗi cập nhật", e);
+        console.log(e.message);
+        return false;
     }
-};
+}
 
 
-export const deleteFootballerById = async (id) => {
+export async function searchFootballerByName(name) {
     try {
-
-        await axios.delete(`${URL_FOOTBALLER}/${id}`);
-    } catch (e) {
-        console.error("Lỗi xóa", e);
-    }
-};
-
-
-export const searchFootballerByName = async (name) => {
-    try {
-
-        const response = await axios.get(`${URL_FOOTBALLER}?name_like=${name}`);
+        const response = await axios.get(`${URL_BE}/footballerList?name_like=${name}`);
         return response.data;
     } catch (e) {
-        console.error("Lỗi tìm kiếm", e);
+        console.log(e.message);
         return [];
     }
-};
+}
